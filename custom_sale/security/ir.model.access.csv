@@ -1,0 +1,8 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+custom_sale_sanple,access.sample.rights,model_sample,base.group_user,1,1,1,1
+custom_sale_sample_line,access.sample.line.rights,model_sample_line,base.group_user,1,1,1,1
+custom_sale_production_order,access.sample.rights,model_production_order,base.group_user,1,1,1,1
+custom_sale_production_order_line,access.sample.line.rights,model_production_order_line,base.group_user,1,1,1,1
+custom_sale_shipping_term,access.shipping.term.rights,model_shipping_term,base.group_user,1,1,1,1
+custom_sale_shipping_port,access.shipping.port.rights,model_shipping_port,base.group_user,1,1,1,1
+custom_production_order_column,access.production.order.column,model_production_order_column,base.group_user,1,1,1,1

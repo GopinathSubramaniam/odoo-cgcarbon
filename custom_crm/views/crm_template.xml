@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!-- Form View -->
+    <record id="custom_sale_product_group_fom" model="ir.ui.view">
+        <field name="name">crm.lead.form.custom</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//button[@name='action_set_won_rainbowman']" position="before">
+                <button string="New Sample" name="action_new_sample" type="object" class="oe_highlight" data-hotkey="q" title="Create new quotation" invisible="type == 'lead' or probability == 0 and not active"/>
+                <button string="New Production" name="action_new_production_order" type="object" class="oe_highlight" data-hotkey="q" title="Create new quotation" invisible="type == 'lead' or probability == 0 and not active"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="lead_num" readonly="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="products" widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Show lead number in kanban view -->
+    <record id="crm_case_kanban_view_leads_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.inherit.custom</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+        <field name="arch" type="xml">
+            
+            <!-- Add custom text to the Kanban card -->
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="lead_num"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Show products field in case view -->
+    <record id="crm_lead_kanban_quick_create_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.quick.create.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.quick_create_opportunity_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="products" widget="many2many_tags"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

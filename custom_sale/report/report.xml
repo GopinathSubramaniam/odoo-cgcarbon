@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+        <record id="report_sample_print" model="ir.actions.report">
+            <field name="name">Sample Print</field>
+            <field name="model">sample</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">custom_sale.sample_pdf_template</field>
+            <field name="report_file">custom_sale.sample_pdf_template</field>
+            <field name="print_report_name">(object.name + '_sample_print.pdf')</field>
+        </record>
+
+        <record id="report_production_order_print" model="ir.actions.report">
+            <field name="name">Production Order Print</field>
+            <field name="model">production.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">custom_sale.production_order_pdf_template</field>
+            <field name="report_file">custom_sale.production_order_pdf_template</field>
+            <field name="print_report_name">(object.name + '_production_order_print.pdf')</field>
+        </record>
+    </data>
+
+</odoo>

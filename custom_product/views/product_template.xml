@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!-- Show products field in case view -->
+    <record id="product_template_create_inherit" model="ir.ui.view">
+        <field name="name">product.template.create.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='inventory']" position="after">
+                <page name="specification" string="Specification">
+                    <group>
+                        <group>
+                            <field name="psd"/>
+                            <field name="platelets"/>
+                            <field name="ctc"/>
+                            <field name="iodine"/>
+                            <field name="surface_area"/>
+                            <field name="k_value"/>
+                            <field name="moisture"/>
+                        </group>
+                        <group>
+                            <field name="bph"/>
+                            <field name="ph"/>
+                            <field name="ash_content"/>
+                            <field name="bulk_density"/>
+                            <field name="attrition_loss"/>
+                            <field name="r_value"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

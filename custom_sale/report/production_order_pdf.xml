@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+        <template id="production_order_pdf">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .text_bold {
+                            font-weight: bold; font-family: 'Calibri';
+                        }
+
+                        table {
+                            border: 1px solid #000;
+                        }
+                        table th, table tr, table td {
+                            border: 1px solid #000;
+                        }
+                    </style>
+                    <div class="container">
+                        <div class="text-center">
+                            <h2 class="text_bold">PRODUCTION ORDER</h2>
+                        </div>
+                        <!--  justify-content-between align-items-end -->
+                        <div class="row mb-3 align-items-end">
+                            <div class="col-6">
+                                <span>
+                                    Customer: <t t-esc="doc.partner_id.name" /><br/>
+                                    <t t-esc="doc.partner_id.name" /><br/>
+                                    <t t-esc="doc.partner_id.street" /><br />
+                                    <t t-esc="doc.partner_id.city" />, <t t-esc="doc.partner_id.state_id.name" /><br />
+                                    <t t-esc="doc.partner_id.country_id.name" />
+                                </span><br/>
+                                
+                                <span style="font-weight: bold;" t-if="doc.lead_id">
+                                    Lead No: <t t-esc="doc.lead_id.lead_num" />  
+                                </span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <span style="font-weight: bold;">
+                                    Order No: <t t-esc="doc.name" />  
+                                </span><br/>
+                                <span>Customer PO No: <t t-esc="doc.customer_po_number" /></span>
+                            </div>
+                        </div>
+                        <div class="mt-5">
+                            <h5 class="text_bold"><b>PRODUCT SPECIFICATION</b></h5>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <t t-foreach="doc.production_order_line" t-as="line">
+                                    <table class="table table-sm mb-0" style="border-bottom: 0px">
+                                        <tr>
+                                            <td class="w-50 text-primary">Product Name</td>
+                                            <td class="text-primary"><span t-esc="line.product_id.name"/></td>
+                                        </tr>
+                                        <tr t-if="line.quantity">
+                                            <td class="w-50">Quantity</td>
+                                            <td><span t-esc="line.quantity"/></td>
+                                        </tr>
+                                        <tr t-if="line.psd">
+                                            <td class="w-50">PSD ( <b><span t-esc="line.size"/></b> )</td>
+                                            <td><span t-esc="line.psd"/></td>
+                                        </tr>
+                                        <tr t-if="line.platelets">
+                                            <td class="w-50">Platelets</td>
+                                            <td><span t-esc="line.platelets"/></td>
+                                        </tr>
+                                        <tr t-if="line.ctc">
+                                            <td class="w-50">CTC</td>
+                                            <td><span t-esc="line.ctc"/></td>
+                                        </tr>
+                                        <tr t-if="line.iodine">
+                                            <td class="w-50">Iodine</td>
+                                            <td><span t-esc="line.iodine"/></td>
+                                        </tr>
+                                        <tr t-if="line.surface_area">
+                                            <td class="w-50">Surface Area</td>
+                                            <td><span t-esc="line.surface_area"/></td>
+                                        </tr>
+                                        <tr t-if="line.moisture">
+                                            <td class="w-50">Moisture</td>
+                                            <td><span t-esc="line.moisture"/></td>
+                                        </tr>
+                                        <tr t-if="line.bph">
+                                            <td class="w-50">BPH</td>
+                                            <td><span t-esc="line.bph"/></td>
+                                        </tr>
+                                        <tr t-if="line.ph">
+                                            <td class="w-50">PH Value</td>
+                                            <td><span t-esc="line.ph"/></td>
+                                        </tr>
+                                        <tr t-if="line.ash_content">
+                                            <td class="w-50">Ash Content</td>
+                                            <td><span t-esc="line.ash_content"/></td>
+                                        </tr>
+                                        <tr t-if="line.bulk_density">
+                                            <td class="w-50">Bulk Density</td>
+                                            <td><span t-esc="line.bulk_density"/></td>
+                                        </tr>
+                                        <tr t-if="line.attrition_loss">
+                                            <td class="w-50">Attrition Loss</td>
+                                            <td><span t-esc="line.attrition_loss"/></td>
+                                        </tr>
+                                        <tr t-if="line.k_value">
+                                            <td class="w-50">K Value</td>
+                                            <td><span t-esc="line.k_value"/></td>
+                                        </tr>
+                                        <tr t-if="line.r_value">
+                                            <td class="w-50">R Value</td>
+                                            <td><span t-esc="line.r_value"/></td>
+                                        </tr>
+                                    </table>
+                                </t>
+
+                                <table class="table table-sm mt-0 border-top-0" style="border-top: 0px">
+                                    <t t-foreach="doc.additional_columns" t-as="ac">
+                                        <tr>
+                                            <td class="w-50"><span t-esc="ac.key"/></td>
+                                            <td><span t-esc="ac.value"/></td>
+                                        </tr>
+                                    </t>
+                                </table>
+                                <!-- <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="ps-2">Product</th>
+                                            <th>Quantity</th>
+                                            <th>Unit Price</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="doc.production_order_line" t-as="line">
+                                            <tr>
+                                                <td class="ps-2"><t t-esc="line.product_id.name" /></td>
+                                                <td><t t-esc="line.description" /></td>
+                                                <td><t t-esc="line.quantity" /></td>
+                                                <td><t t-esc="line.product_uom.name" /></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table> -->
+                            </div>
+                        </div>
+
+                        <div class="mt-5">
+                            <h5 class="text_bold">PACKAGING DETAILS</h5>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td class="w-50">Packing</td>
+                                    <td><span t-esc="doc.packing"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="w-50">Bag Marking</td>
+                                    <td><span t-esc="doc.bag_marking"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="w-50">Shipment Schedule</td>
+                                    <td><span t-esc="doc.shipment_schedule"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="production_order_pdf_template">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="custom_sale.production_order_pdf"/>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

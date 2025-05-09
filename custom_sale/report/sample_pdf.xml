@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+        <template id="sample_pdf">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="container">
+                         <style>
+                            .text_bold {
+                                font-weight: bold; font-family: 'Calibri';
+                            }
+
+                            table {
+                                border: 1px solid #000;
+                            }
+                            table th, table tr, table td {
+                                border: 1px solid #000;
+                            }
+                        </style>
+                        <div class="text-center mb-3 pb-3">
+                            <h2 class="text_bold">SAMPLE REQUEST</h2>
+                        </div>
+                        
+                        <!--  justify-content-between align-items-end -->
+                        <div class="row mb-3 align-items-center">
+                            <div class="col">
+                                <div class="text_bold">CUSTOMER</div>
+                                <t t-esc="doc.partner_id.name" /><br />
+                                <t t-esc="doc.partner_id.street" /><br />
+                                <t t-esc="doc.partner_id.city" />, <t t-esc="doc.partner_id.state_id.name" /><br />
+                                <t t-esc="doc.partner_id.country_id.name" /><br />
+                                <span t-if="doc.delivery_date_time">
+                                    Delivery Date Time: 
+                                    <span t-esc="doc.delivery_date_time.strftime('%d/%m/%Y %I:%M %p')"/>
+                                </span>
+                            </div>
+                            <div class="col text-end">
+                                <span style="font-weight: bold;" t-if="doc.lead_id">
+                                    Lead Number: <t t-esc="doc.lead_id.lead_num" />  
+                                </span><br/>
+                                <span>
+                                    Order Number: <t t-esc="doc.name" />
+                                </span><br/>
+                                <span>
+                                    Courier Type: 
+                                    <t t-if="doc.courier_type == 'air'">Air</t>
+                                    <t t-else="">Normal</t>
+                                </span><br/>
+                                <span>
+                                    Courier Payment: 
+                                    <t t-if="doc.courier_payment_status == 'to_pay'">To Pay</t>
+                                    <t t-else="">Paid</t>
+                                </span>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped mt-3">
+                            <tr>
+                                <td class="w-50">
+                                    <span>PSD</span>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.particle_size_distribution" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-50">
+                                    <span>Minimum quantity to be send</span>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.min_quantity" /> 
+                                    <t t-esc="doc.product_uom.name" /> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-50">
+                                    <span>CTC</span>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.ctc" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-50">
+                                    <span>Apparent Density</span>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.apparent_density" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-50">
+                                    <span>Moisture</span>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.moisture" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-50">
+                                    <span>Ash Value</span>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.ash_value" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-50">
+                                    <span>PH Value</span>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.ph_value" />
+                                </td>
+                            </tr>
+                            <!-- <tr>
+                                <td class="w-50">
+                                    <span>Any Other Remarks</span>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.remark" />
+                                </td>
+                            </tr> -->
+                        </table>
+                        
+                        <!-- <div class="row d-none">
+                            <div class="col">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="ps-2">Product</th>
+                                            <th>Quantity</th>
+                                            <th>Unit Price</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="doc.sample_line" t-as="line">
+                                            <tr>
+                                                <td class="ps-2"><t t-esc="line.product_id.name" /></td>
+                                                <td><t t-esc="line.description" /></td>
+                                                <td><t t-esc="line.quantity" /></td>
+                                                <td><t t-esc="line.product_uom.name" /></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="sample_pdf_template">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="custom_sale.sample_pdf"/>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!-- Action for all -->
+    <record id="sale_samples_action" model="ir.actions.act_window">
+        <field name="name">Samples</field>
+        <field name="res_model">sample</field>
+        <!-- <field name="inherit_id" ref="sale.view_order_form"/> -->
+        <field name="view_mode">list,form,kanban</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage Samples Here
+            </p>
+        </field>
+    </record>
+
+    <!-- Action for new sample  -->
+    <record id="sale_new_sample_action" model="ir.actions.act_window">
+        <field name="name">Samples</field>
+        <field name="res_model">sample</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="custom_sale.view_order_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">sample.form</field>
+        <field name="model">sample</field>
+        <field name="arch" type="xml">
+            <form string="Sample" class="o_sale_order">
+                <header>
+                    <button string="Confirm" class="btn-primary" name="btn_action" type="object" context="{'state': 'new'}" invisible="state in ['new','approved','sent','cancelled']"/>
+                    <button string="Send" class="btn-primary" name="btn_action" type="object" context="{'state': 'sent'}"/>
+                    <button string="Deliver" class="btn-primary" name="btn_action" type="object" context="{'state': 'approved'}" invisible="state in ['draft','approved']"/>
+                    <button string="Cancel" class="btn-secondary" name="btn_action" type="object" context="{'state': 'cancelled'}" invisible="state in ['draft','new', 'cancelled']"/>
+                    
+                    <button string="Print" class="btn-secondary" name="btn_print" type="object"/>
+                    <field name="state" widget="statusbar" class="align-items-center" statusbar_visible="draft,new,sent,approved,cancelled"/>
+                </header>
+                <sheet>
+                    <group name="sale_header">
+                        <group>
+                            <field name="name"/>
+                            <field name="partner_id" widget="many2one" options="{'no_create': True}"/>
+                            <field name="tags" widget="many2many_tags" options="{'no_create': True}" placeholder="Select Tags"/>
+                            <field name="particle_size_distribution" placeholder="Particle Size Distribution"/>
+                            <field name="ctc" placeholder="CTC"/>
+                            <field name="apparent_density" placeholder="Apparent Density"/>
+                            <field name="delivery_date_time" placeholder="Delivery Date Time"/>
+                        </group>
+                        <group>
+                            
+                            <field name="lead_id" widget="many2one" options="{'no_create': True}" readonly="context.get('lead_id') != None"/>
+                            <!-- <field name="remark" placeholder="Any Other Remarks"/>
+                            <field name="purpose" placeholder="Purpose for which required (Kindly give a brief description)"/> -->
+                           
+                            <field name="moisture" placeholder="Moisture"/>
+                            <field name="ash_value" placeholder="Ash Value"/>
+                            <field name="ph_value" placeholder="PH Value"/>
+                            <field name="courier_type"/>
+                            <field name="courier_payment_status"/>
+
+                            <div class="row">
+                                <div class="col">
+                                    <label for="min_quantity" class="fw-bold">Minimum Quantity</label><br/>
+                                    <field name="min_quantity" placeholder="Minimum quantity of sample to be send"/>
+                                </div>
+                                <div class="col">
+                                    <label for="product_uom" class="fw-bold">Unit of Measure</label><br/>
+                                    <field name="product_uom" placeholder="Select Unit"/>
+                                </div>
+                            </div>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Sample Lines" name="sample_line">
+                            <field name="sample_line" widget="sol_o2m" mode="list,kanban">
+                                <list string="Sample Lines" editable="bottom" limit="50">
+                                    <control>
+                                        <create name="add_product_control" string="Add a product"/>
+                                        <!-- <create name="add_note_control" string="Add a note" context="{'default_display_type': 'line_note'}"/> -->
+                                    </control>
+                                    <field
+                                    name="product_id"
+                                    string="Product Variant"
+                                    force_save="1"
+                                    options="{
+                                        'no_open': True,
+                                    }"
+                                    widget="sol_product_many2one"/>
+                                    <field name="description"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="view_order_list" model="ir.ui.view">
+        <field name="name">sample.list</field>
+        <field name="model">sample</field>
+        <field name="arch" type="xml">
+            <list string="Samples" decoration-danger="state == 'cancelled'" decoration-primary="state == 'sent'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="state"/>
+                <field name="courier_type"/>
+                <field name="courier_payment_status"/>
+                <field name="tags" widget="many2many_tags" string="Tags"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- New Menu -->
+    <menuitem id="sample_menu_sale" name="Samples" parent="sale.sale_order_menu" action="sale_samples_action" sequence="10"/>
+</odoo>

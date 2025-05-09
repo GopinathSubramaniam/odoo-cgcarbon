@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+   <record id="sale_order_form_custom" model="ir.ui.view">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='date_order']" position="after">
+                <field name="validate_days"/>
+            </xpath>
+
+            <xpath expr="//field[@name='validity_date']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="tags" widget="many2many_tags" options="{'no_create': True}"/>
+                <!-- <field name="ctc"/> -->
+                <field name="lead_id" widget="many2one" options="{'no_create': True}" readonly="context.get('lead_id') != None"/>
+                <field name="shipping_term_id" widget="many2one"/>
+                <field name="shipping_port_id" widget="many2one"/>
+            </xpath>
+
+            <xpath expr="//field[@name='currency_id']" position="attributes">
+                <attribute name="invisible">0</attribute>
+                <attribute name="readonly">False</attribute>
+            </xpath>
+
+            <!-- Order Lines -->
+            <xpath expr="//list//field[@name='product_uom_qty']" position="after">
+                <field name="mesh_size" />
+                <field name="ctc" />
+
+                <field name="ex_factory" placeholder="Ex Factory"/>
+                <field name="shipping_charge" placeholder="FOB Charge"/>
+                <field name="shipping_term_inr" placeholder="Total FOB" class="text-danger fw-bold"/>
+                
+                <field name="conversion_rate" placeholder="Conversion Rate"/>
+                <field name="converted_price" placeholder="Converted Price"/>
+                <field name="shipping_term" placeholder="CIF Charge"/>
+            </xpath>
+            <xpath expr="//list//field[@name='product_uom_qty']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//list//field[@name='tax_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//list//field[@name='price_unit']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//list//field[@name='price_subtotal']" position="attributes">
+                <attribute name="class">text-danger fw-bold</attribute>
+            </xpath>
+
+
+            <!-- <xpath expr="//field[@name='l10n_in_gst_treatment']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath> -->
+
+            <!-- <xpath expr="//field[@name='order_line']//field[@name='product_uom_qty']" position="after">
+                <field name="mesh_size" />
+                <field name="ctc" />
+            </xpath> -->
+        </field>
+    </record>
+
+    <!-- Shipping Terms Menu -->
+    <record id="action_shipping_terms_menu" model="ir.actions.act_window">
+        <field name="name">Shipping Terms</field>
+        <field name="res_model">shipping.term</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage Shipping Terms Here
+            </p>
+        </field>
+    </record>
+
+    <!-- Shipping Terms List View -->
+    <record id="shipping_term_list" model="ir.ui.view">
+        <field name="name">shipping.term.list</field>
+        <field name="model">shipping.term</field>
+        <field name="arch" type="xml">
+           <list string="Shipping Terms">
+                <field name="name"/>
+                <field name="desc"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_shipping_ports_menu" model="ir.actions.act_window">
+        <field name="name">Shipping Ports</field>
+        <field name="res_model">shipping.port</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage Shipping Ports Here
+            </p>
+        </field>
+    </record>
+
+    <!-- Shipping Terms List View -->
+    <record id="shipping_port_list" model="ir.ui.view">
+        <field name="name">shipping.port.list</field>
+        <field name="model">shipping.port</field>
+        <field name="arch" type="xml">
+           <list string="Shipping Ports">
+                <field name="name"/>
+                <field name="desc"/>
+            </list>
+        </field>
+    </record>
+
+    <menuitem id="shipping_term_menu" name="Shipping Terms" parent="sale.menu_sale_config" action="action_shipping_terms_menu" sequence="4"/>
+    <menuitem id="shipping_port_menu" name="Shipping Ports" parent="sale.menu_sale_config" action="action_shipping_ports_menu" sequence="5"/>
+</odoo>

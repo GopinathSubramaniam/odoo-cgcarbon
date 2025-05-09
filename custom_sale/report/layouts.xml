@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="custom_report_external_layout">
+
+        <t t-if="not o and doc">
+            <t t-set="o" t-value="doc"/>
+        </t>
+        <t t-if="not company" t-set="company" t-value="o.company_id"/>
+        <div t-attf-class="header o_company_#{company.id}_layout">
+            <div class="row mx-0">
+                <div class="d-flex justify-content-between align-items-center mb-2 col-6 mx-0">
+                    <img t-if="company.logo" class="o_company_logo mb-2" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+                </div>
+                <div class="col-6 mx-0">
+                    <div class="text-end text-muted">
+                        <t t-if="company.name" t-out="company.name"/>
+                        <br/>
+                        <t t-if="company.street" t-out="company.street"/>
+                        <t t-if="company.street2" t-out="', ' + company.street2"/>  <br/>
+                        <t t-if="company.zip" t-out="' ' + company.zip"/>
+                        <t t-if="company.city" t-out="' ' + company.city"/>  <br/>
+                        <t t-if="company.state_id" t-out="' ' + company.state_id.name"/>
+                        <t t-if="company.country_id" t-out="' ' + company.country_id.name"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            t-attf-class="article o_report_layout_standard o_table_standard o_company_#{company.id}_layout o_snail_mail {{'o_report_layout_background' if company.layout_background != 'Blank' else ''}}"
+            t-attf-style="background-image: url({{ 'data:image/png;base64,%s' % company.layout_background_image.decode('utf-8') if company.layout_background_image and company.layout_background == 'Custom' else
+                           '/base/static/img/demo_logo_report.png' if company.layout_background == 'Demo logo' else ''}});"
+            t-att-data-oe-model="o and o._name"
+            t-att-data-oe-id="o and o.id"
+            t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout" />
+            <t t-out="0" />
+            <t t-if="signature_fields">
+                <div t-out="signature_fields" class="last-page mb-3" style="page-break-inside: avoid; page-break-before:auto;"/>
+            </t>
+        </div>
+
+        <div
+            t-attf-class="footer o_company_#{company.id}_layout {{report_type != 'pdf' and 'mt-auto'}}">
+            <div class="text-end text-muted">
+                <div t-if="report_type == 'pdf'">Page <span class="page" /> / <span
+                        class="topage" /></div>
+            </div>
+        </div>
+    </template>
+</odoo>

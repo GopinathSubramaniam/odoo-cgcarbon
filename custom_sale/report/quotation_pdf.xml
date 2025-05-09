@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+
+    <!-- SO -->
+    <template id="report_so_custom" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+            <t t-set="company" t-value="doc.company_id" />
+            <t t-set="o" t-value="doc.with_context(lang=lang)" />
+            <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)" />
+            
+            <t t-call="web.external_layout">
+                <div class="page mt-3">
+                    <style>
+                        .text_bold {
+                            font-weight: bold; font-family: 'Calibri';
+                        }
+
+                        table {
+                            border: 1px solid #000;
+                        }
+                        table th, table tr, table td {
+                            border: 1px solid #000;
+                        }
+                    </style>
+                    <div class="text-center mb-3 pb-3">
+                        <h2 class="text_bold">QUOTATION</h2>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <h5 class="text-primary text-strong">
+                                Quote Number: <span t-field="doc.name"></span>
+                            </h5>
+                            <h5 class="text-primary text-strong">
+                                Quote Date: <span t-esc="doc.date_order.strftime('%Y/%m/%d')"></span>
+                            </h5>
+                        </div>
+                        <div class="col-6">
+                            <h5 class="text-primary text-strong text-end">
+                                Validity Date: Before <span t-field="doc.validate_days"> Days</span>
+                            </h5>
+                        </div>
+                    </div>
+                    
+                    <!-- Line Items -->
+                    <t t-foreach="doc.order_line" t-as="line">
+                        <table class="table mt-2">
+                            <tr>
+                                <td class="ps-2 w-50 align-middle">Item</td>
+                                <td class="align-middle"><span t-field="line.name"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="ps-2 w-50">
+                                    <span t-field="doc.shipping_term_id.name"></span> / <span t-field="doc.shipping_port_id.name"></span>
+                                </td>
+                                <td>
+                                    <span t-field="line.price_total"/>/<span t-field="line.product_uom.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-2 w-50">Mesh Size</td>
+                                <td><span t-field="line.mesh_size"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="ps-2 w-50">CTC/IV</td>
+                                <td><span t-field="line.ctc"></span></td>
+                            </tr>
+                        </table>
+                    </t>
+                    <!-- Order Detail -->
+                    <!-- <table class="table table-bordered mt-2">
+                        <tr>
+                            <td class="ps-2 w-25">Shipping Term</td>
+                            <td><span t-field="doc.shipping_term_id.name"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="ps-2 w-25">Shipping Port</td>
+                            <td><span t-field="doc.shipping_port_id.name"></span></td>
+                        </tr>
+                    </table> -->
+
+                    <div t-if="doc.payment_term_id.name or doc.note" class="mt-3">
+                        <span class="fw-bold">Payment Terms: </span>
+                        <span t-field="doc.payment_term_id.name"/>
+                        <span t-field="doc.note"/>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</data>
